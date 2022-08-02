@@ -18,14 +18,12 @@ public class SupportFunctions {
 	/**
 	 * method for Key generation(secret or private key) using AES Algorithm, its using random key
 	 */
-	public SecretKey getKeyFromRandom() throws NoSuchAlgorithmException {
-		SecureRandom secureRandom = new SecureRandom();
-		
+	public SecretKey generateKey() throws NoSuchAlgorithmException {
 		//to get the instance of Key generation using AES Algorithm
 		KeyGenerator keyGenerator = KeyGenerator.getInstance("AES");
 		
-		//Initializing keygenerator with 256 bits
-		keyGenerator.init(256, secureRandom);
+		//Initializing keygenerator with 128 bits
+		keyGenerator.init(128);
 		
 		return keyGenerator.generateKey();
 	}
@@ -33,7 +31,7 @@ public class SupportFunctions {
 	/**
 	 * the AES secret key can be derived from a given password using a
 	 * password-based key derivation function like PBKDF2
-	 * @param password, salt
+	 * @param password, salt(the salt is also a random number)
 	 * @return the secret key
 	 */
 	public SecretKey getKeyFromPassword(String password, String salt)
@@ -48,11 +46,10 @@ public class SupportFunctions {
 	/**
 	 * Initialization Vector is a pseudo-random value and has the same size as the block that is encrypted. 
 	 * We can use the SecureRandom class to generate a random IV.
+	 * @param salt 
 	 */
-	public IvParameterSpec generateIv() {
-	    byte[] iv = new byte[16];
-	    new SecureRandom().nextBytes(iv);
-	    return new IvParameterSpec(iv);
+	public IvParameterSpec generateIv(byte[] salt) {
+	    return new IvParameterSpec(salt);
 	}
 	
 	public String hashing(String input) throws NoSuchAlgorithmException {
